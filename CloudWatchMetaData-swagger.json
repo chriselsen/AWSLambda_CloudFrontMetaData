@@ -1,0 +1,67 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "2016-10-09T21:56:41Z",
+    "title": "CloudWatchMetaData"
+  },
+  "host": "abcdefghij.execute-api.us-west-2.amazonaws.com",
+  "basePath": "/prod",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/{proxy+}": {
+      "x-amazon-apigateway-any-method": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "proxy",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseTemplates": {
+                "text/plain": "$input.path('$')"
+              }
+            }
+          },
+          "requestTemplates": {
+            "application/json": "{\r\n  \"body\" : $input.json('$'),\r\n  \"headers\": {\r\n    #foreach($header in $input.params().header.keySet())\r\n    \"$header\": \"$util.escapeJavaScript($input.params().header.get($header))\" #if($foreach.hasNext),#end\r\n\r\n    #end\r\n  },\r\n  \"method\": \"$context.httpMethod\",\r\n  \"params\": {\r\n    #foreach($param in $input.params().path.keySet())\r\n    \"$param\": \"$util.escapeJavaScript($input.params().path.get($param))\" #if($foreach.hasNext),#end\r\n\r\n    #end\r\n  },\r\n  \"query\": {\r\n    #foreach($queryParam in $input.params().querystring.keySet())\r\n    \"$queryParam\": \"$util.escapeJavaScript($input.params().querystring.get($queryParam))\" #if($foreach.hasNext),#end\r\n\r\n    #end\r\n  }  \r\n}"
+          },
+          "uri": "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:123456789012:function:CloudFrontMetaData/invocations",
+          "passthroughBehavior": "when_no_templates",
+          "httpMethod": "POST",
+          "cacheNamespace": "mkmme8",
+          "cacheKeyParameters": [
+            "method.request.path.proxy"
+          ]
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Empty": {
+      "type": "object",
+      "title": "Empty Schema"
+    }
+  }
+}
