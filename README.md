@@ -28,7 +28,7 @@ edgeloc=sfo
 You can now use the following Javascript code for Google Analytics to push the information into Google Analytics as custom dimension for each visit:
 
 ```javascript
-ga('create', 'UA-39076327-3', 'auto');
+ga('create', 'UA-12345678-1', 'auto');
 	function processData(x) {
 		var y = {};
 		for (var i = 0; i < x.length-1; i++) {
