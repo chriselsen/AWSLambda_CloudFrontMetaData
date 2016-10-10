@@ -5,6 +5,7 @@ exports.handler = (event, context, callback) => {
     var output = "";
 
     var ipArray = event.headers["X-Forwarded-For"].split(",");
+    console.log("X-Forwarded-For: ", event.headers["X-Forwarded-For"]);
     output += "ipver=" + (ipArray[0].indexOf(":") > -1 ? 'IPv6' : 'IPv4');
     output += require('os').EOL;
 
@@ -14,6 +15,7 @@ exports.handler = (event, context, callback) => {
 
     function DNSLookup(){
         loc = wait.for(dns.reverse, (ipArray[1].trim()));
+        console.log("DNS: ", loc);
         output += "edgeloc=" + (loc[0].split("."))[1].substring(0, 3);
         callback(null, output);
     }
