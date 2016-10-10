@@ -1,4 +1,3 @@
-
 exports.handler = (event, context, callback) => {
     var dns = require('dns');
     var wait = require('wait.for');
@@ -14,9 +13,15 @@ exports.handler = (event, context, callback) => {
     output += require('os').EOL;
 
     function DNSLookup(){
-        loc = wait.for(dns.reverse, (ipArray[1].trim()));
-        console.log("DNS: ", loc);
-        output += "edgeloc=" + (loc[0].split("."))[1].substring(0, 3);
+        try {
+			loc = wait.for(dns.reverse, (ipArray[1].trim()));
+		} catch(err) {
+			loc = [ 'unk.unk' ];
+		}
+        console.log("DNS: ", loc[0]);
+		edgeLoc = (loc[0].split("."))[1].substring(0, 3);
+        output += "edgeloc=" + edgeLoc;
+		console.log("EdgeLoc: ", edgeLoc);
         callback(null, output);
     }
 
