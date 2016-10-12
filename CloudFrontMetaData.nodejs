@@ -1,38 +1,38 @@
 exports.handler = (event, context, callback) => {
-    var dns = require('dns');
-    var output = "";
+	var dns = require('dns');
+	var output = "";
 
 	var xApiDomain = event.headers["x-api-domain"];
 	if (!xApiDomain) { xApiDomain = 'unknown' }
-	console.log("x-api-domain: ", xApiDomain);
 	
-    var ipArray = event.headers["X-Forwarded-For"].split(",");
-    console.log("X-Forwarded-For: ", event.headers["X-Forwarded-For"]);
+	var ipArray = event.headers["X-Forwarded-For"].split(",");
+	console.log("X-Forwarded-For: ", event.headers["X-Forwarded-For"]);
 	ipVersion = (ipArray[0].indexOf(":") > -1 ? 'IPv6' : 'IPv4');
-    output += "ipver=" + ipVersion;
-    output += require('os').EOL;
-
-    var viaArray = event.headers["Via"].split(" ");
+	output += "ipver=" + ipVersion;
+	output += require('os').EOL;
+	console.log("IP Version: ", ipVersion);
+    
+	var viaArray = event.headers["Via"].split(" ");
 	httpVersion = viaArray[0].replace('https/','')
-    output += "httpver=" + httpVersion;
-    output += require('os').EOL;
+	output += "httpver=" + httpVersion;
+	output += require('os').EOL;
+	console.log("HTTP Version: ", httpVersion);
 
-    dns.reverse(ipArray[1].trim(), function (err, data) {
+	dns.reverse(ipArray[1].trim(), function (err, data) {
         if (err) {
-            edgeLoc = 'unk';
+		edgeLoc = 'unk';
         } else {
-            console.log("DNS: ", data[0]);
 	        edgeLoc = (data[0].split("."))[1].substring(0, 3);
         }
         output += "edgeloc=" + edgeLoc;
-	    output += require('os').EOL;
-	    console.log("EdgeLoc: ", edgeLoc);
+	output += require('os').EOL;
+	console.log("EdgeLoc: ", edgeLoc);
 	     
-	    putCloudWatch(xApiDomain, ipVersion, httpVersion, edgeLoc, callback); 
+	putCloudWatch(xApiDomain, ipVersion, httpVersion, edgeLoc, callback); 
 	     
-	    callback(null, output);
+	callback(null, output);
         
-    });
+	});
 };
 
 function putCloudWatch(Domain, IPVersion, HTTPVersion, EdgeLoc, callback){
