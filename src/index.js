@@ -21,16 +21,17 @@ exports.handler = (event, context, callback) => {
 
     function DNSLookup(){
         try {
-			loc = wait.for(dns.reverse, (ipArray[1].trim()));
-		} catch(err) {
-			loc = [ 'unk.unk' ];
-		}
+		loc = wait.for(dns.reverse, (ipArray[1].trim()));
+	} catch(err) {
+		loc = [ 'unk.unk' ];
+	}
         console.log("DNS: ", loc[0]);
-		edgeLoc = (loc[0].split("."))[1].substring(0, 3);
+	edgeLoc = (loc[0].split("."))[1].substring(0, 3);
         output += "edgeloc=" + edgeLoc;
-		console.log("EdgeLoc: ", edgeLoc);
-		
-		putCloudWatch(xApiDomain, ipVersion, httpVersion, edgeLoc, callback);
+	output += require('os').EOL;
+	console.log("EdgeLoc: ", edgeLoc);
+	
+	putCloudWatch(xApiDomain, ipVersion, httpVersion, edgeLoc, callback);
 		
         callback(null, output);
     }
