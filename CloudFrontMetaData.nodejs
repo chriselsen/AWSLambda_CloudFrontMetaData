@@ -13,7 +13,7 @@ exports.handler = (event, context, callback) => {
 	console.log("IP Version: ", ipVersion);
     
 	var viaArray = event.headers["Via"].split(" ");
-	httpVersion = viaArray[0].replace('https/','')
+	httpVersion = viaArray[0].replace('https/','').replace('HTTPS/','');
 	output += "httpver=" + httpVersion;
 	output += require('os').EOL;
 	console.log("HTTP Version: ", httpVersion);
