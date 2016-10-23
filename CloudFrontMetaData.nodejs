@@ -28,59 +28,7 @@ exports.handler = (event, context, callback) => {
 	output += require('os').EOL;
 	console.log("EdgeLoc: ", edgeLoc);
 	     
-	putCloudWatch(xApiDomain, ipVersion, httpVersion, edgeLoc, callback); 
-	     
 	callback(null, output);
         
 	});
 };
-
-function putCloudWatch(Domain, IPVersion, HTTPVersion, EdgeLoc, callback){
-    var AWS = require('aws-sdk');
-    AWS.config.region = 'us-west-2';
-    var cloudwatch = new AWS.CloudWatch();
-    
-    var params = {
-            MetricData: [
-                {
-                    MetricName: 'IP-Version', /* required */
-                    Dimensions: [
-                        {
-                            Name: Domain, /* required */
-                            Value: IPVersion /* required */
-                        },
-                    ],
-                    Timestamp: + Math.floor(new Date() / 1000),
-                    Unit: 'Count',
-                    Value: 1.0 
-                },
-                {
-                    MetricName: 'HTTP-Version', /* required */
-                    Dimensions: [
-                        {
-                            Name: Domain, /* required */
-                            Value: HTTPVersion /* required */
-                        },
-                    ],
-                    Timestamp: + Math.floor(new Date() / 1000),
-                    Unit: 'Count',
-                    Value: 1.0
-                },
-				{
-                    MetricName: 'Edge Location', /* required */
-                    Dimensions: [
-                        {
-                            Name: Domain, /* required */
-                            Value: EdgeLoc /* required */
-                        },
-                    ],
-                    Timestamp: + Math.floor(new Date() / 1000),
-                    Unit: 'Count',
-                    Value: 1.0 
-                }
-            ],
-            Namespace: 'CloudFrontStats' /* required */
-        };
-        
-        cloudwatch.putMetricData(params, function(err, data) {});
-}
