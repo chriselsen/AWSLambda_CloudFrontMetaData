@@ -1,9 +1,6 @@
-exports.handler = (event, context, callback) => {
+exports.handler = function(event, context, callback) {
 	var dns = require('dns');
 	var output = "";
-
-	var xApiDomain = event.headers["x-api-domain"];
-	if (!xApiDomain) { xApiDomain = 'unknown' }
 	
 	var ipArray = event.headers["X-Forwarded-For"].split(",");
 	console.log("X-Forwarded-For: ", event.headers["X-Forwarded-For"]);
