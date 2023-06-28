@@ -1,4 +1,4 @@
-# CloudFrontMetaData [![Build Status](https://travis-ci.org/chriselsen/AWSLambda_CloudFrontMetaData.svg?branch=master)](https://travis-ci.org/chriselsen/AWSLambda_CloudFrontMetaData)
+# CloudFrontMetaData 
 A simple AWS Lambda (http://aws.amazon.com/lambda) function that in combination with Amazon API Gateway (https://aws.amazon.com/api-gateway/) can extract meta data (IP Version, HTTP Version, and AWS CloudFront Edge Location) from visitor requests, when placed behind CloudFront.
 
 ## Setup
